@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 bot = Bot(token=telegram_token)
 dp = Dispatcher()
 
-OPENROUTER_URL = "https://openrouter.ai/api/v1"
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 openrouter_url = OPENROUTER_URL
 
 async def get_cloud_ai_response(prompt: str) -> str:
