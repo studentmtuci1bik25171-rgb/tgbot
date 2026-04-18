@@ -26,7 +26,7 @@ openrouter_url = OPENROUTER_URL
 async def get_cloud_ai_response(prompt: str) -> str:
     """Запрос к OpenRouter (облачный ИИ)"""
     try:
-        async with aiohttp.ClientSession(timeout) as session:
+        async with aiohttp.ClientSession() as session:
             headers = {
                 "Authorization": f"Bearer {openrouter_api_key}",
                 "Content-Type": "application/json"
