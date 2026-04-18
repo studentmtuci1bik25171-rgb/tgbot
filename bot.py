@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 import os
-import time
 
 # Импортируем ключи из .env
 load_dotenv()
@@ -38,8 +37,8 @@ async def get_cloud_ai_response(prompt: str) -> str:
                 "temperature": 0.7,
                 "max_tokens": 500
             }
-            async with session.post(openrouter_url, json=payload, headers=headers) as resp:
-                time.sleep(10)
+            timeout = aiohttp.ClientTimeout(total=20, connect=10, sock_read=10)
+            async with session.post(openrouter_url, json=payload, headers=headers, timeout=timeout) as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     return data['choices'][0]['message']['content'].strip()
@@ -64,7 +63,7 @@ async def start(message: types.Message):
         "🤖 Привет! Я бот с ИИ.\n\n"
         "✅ Использую модель (google/gemma-4-31b-it:free)\n"
         "Просто напиши мне любое сообщение!\n"
-        "Ответ может занять до 10 секунд."
+        "Ответ может занять до 20 секунд."
     )
 
 @dp.message(Command("help"))
