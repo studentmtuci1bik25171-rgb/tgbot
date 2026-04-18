@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 import os
-import time
 
 # Импортируем ключи из .env
 load_dotenv()
@@ -27,7 +26,8 @@ openrouter_url = OPENROUTER_URL
 async def get_cloud_ai_response(prompt: str) -> str:
     """Запрос к OpenRouter (облачный ИИ)"""
     try:
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=10, connect=5, sock_read=5)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             headers = {
                 "Authorization": f"Bearer {openrouter_api_key}",
                 "Content-Type": "application/json"
@@ -39,7 +39,6 @@ async def get_cloud_ai_response(prompt: str) -> str:
                 "max_tokens": 500
             }
             async with session.post(openrouter_url, json=payload, headers=headers) as resp:
-                time.sleep(5)
                 if resp.status == 200:
                     data = await resp.json()
                     return data['choices'][0]['message']['content'].strip()
@@ -62,7 +61,7 @@ async def get_ai_response(prompt: str) -> str:
 async def start(message: types.Message):
     await message.answer(
         "🤖 Привет! Я бот с ИИ.\n\n"
-        "✅ Использую модель ({openrouter_model})\n"
+        "✅ Использую модель (google/gemma-4-31b-it:free)\n"
         "Просто напиши мне любое сообщение!"
     )
 
