@@ -26,7 +26,8 @@ openrouter_url = OPENROUTER_URL
 async def get_cloud_ai_response(prompt: str) -> str:
     """Запрос к OpenRouter (облачный ИИ)"""
     try:
-        async with aiohttp.ClientSession() as session:
+        timeout = aiohttp.ClientTimeout(total=20, connect=10, sock_read=10)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
             headers = {
                 "Authorization": f"Bearer {openrouter_api_key}",
                 "Content-Type": "application/json"
@@ -61,7 +62,8 @@ async def start(message: types.Message):
     await message.answer(
         "🤖 Привет! Я бот с ИИ.\n\n"
         "✅ Использую модель (google/gemma-4-31b-it:free)\n"
-        "Просто напиши мне любое сообщение!"
+        "Просто напиши мне любое сообщение!\n"
+        "Ответ может занять до 20 секунд."
     )
 
 @dp.message(Command("help"))
