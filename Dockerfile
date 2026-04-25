@@ -11,6 +11,4 @@ ENV HOME=/app
 ENV PATH="/opt/venv/bin:$PATH"
 COPY --from=build-stage /opt/venv /opt/venv
 COPY . .
-RUN adduser -D app && chown app .
-USER app
 CMD ["python", "bot.py"]
