@@ -23,18 +23,17 @@ OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 openrouter_url = OPENROUTER_URL
 
 async def get_cloud_ai_response(prompt: str) -> str:
-    """Запрос к OpenRouter (облачный ИИ)"""
     try:
         async with aiohttp.ClientSession() as session:
             headers = {
-                "Authorization": "Bearer {openrouter_api_key}",
+                "Authorization": f"Bearer {openrouter_api_key}",
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": openrouter_model,
+                "model": "google/gemma-4-31b-it:free",
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.7,
-                "max_tokens": 500
+                "max_tokens": 5000
             }
             async with session.post(openrouter_url, json=payload, headers=headers) as resp:
                 if resp.status == 200:
@@ -47,11 +46,9 @@ async def get_cloud_ai_response(prompt: str) -> str:
 
 # ===== ОСНОВНАЯ ФУНКЦИЯ ПОЛУЧЕНИЯ ОТВЕТА =====
 async def get_ai_response(prompt: str) -> str:
-    
     response = await get_cloud_ai_response(prompt)
     if response:
         return response
-    
     return "❌ Извините, AI временно недоступен. Попробуйте позже."
 
 # ===== КОМАНДЫ БОТА =====
