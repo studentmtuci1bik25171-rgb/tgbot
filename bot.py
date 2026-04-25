@@ -1,13 +1,12 @@
 import asyncio
 import logging
 import aiohttp
-from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
+from aiogram.client.session.aiohttp import AiohttpSession
 import os
 
 # Импортируем ключи из .env
-load_dotenv()
 telegram_token = os.getenv("TELEGRAM_TOKEN")
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
 openrouter_model = os.getenv("OPENROUTER_MODEL")
@@ -17,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Инициализация бота
-bot = Bot(token=telegram_token)
+bot = Bot(token=telegram_token, proxy=proxy_url)
 dp = Dispatcher()
 
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
@@ -37,8 +36,7 @@ async def get_cloud_ai_response(prompt: str) -> str:
                 "temperature": 0.7,
                 "max_tokens": 500
             }
-            timeout = aiohttp.ClientTimeout(total=20, connect=10, sock_read=10)
-            async with session.post(openrouter_url, json=payload, headers=headers, timeout=timeout) as resp:
+            async with session.post(openrouter_url, json=payload, headers=headers) as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     return data['choices'][0]['message']['content'].strip()
@@ -62,8 +60,7 @@ async def start(message: types.Message):
     await message.answer(
         "🤖 Привет! Я бот с ИИ.\n\n"
         "✅ Использую модель (google/gemma-4-31b-it:free)\n"
-        "Просто напиши мне любое сообщение!\n"
-        "Ответ может занять до 20 секунд."
+        "Просто напиши мне любое сообщение!"
     )
 
 @dp.message(Command("help"))
