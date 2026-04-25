@@ -37,7 +37,7 @@ async def get_cloud_ai_response(prompt: str) -> str:
                 "max_tokens": 500
             }
             async with session.post(openrouter_url, json=payload, headers=headers) as resp:
-                acyncio.sleep(10)
+                await acyncio.sleep(10)
                 if resp.status == 200:
                     data = await resp.json()
                     return data['choices'][0]['message']['content'].strip()
@@ -50,7 +50,7 @@ async def get_cloud_ai_response(prompt: str) -> str:
 async def get_ai_response(prompt: str) -> str:
     
     response = await get_cloud_ai_response(prompt)
-    asyncio.sleep(10)
+    await asyncio.sleep(10)
     if response:
         return response
     
