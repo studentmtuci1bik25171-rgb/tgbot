@@ -16,10 +16,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Инициализация бота
-bot = Bot(token=telegram_token, proxy=proxy_url)
+bot = Bot(token=telegram_token)
 dp = Dispatcher()
 
-OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_URL = "https://anannas.ai/v1"
 openrouter_url = OPENROUTER_URL
 
 async def get_cloud_ai_response(prompt: str) -> str:
