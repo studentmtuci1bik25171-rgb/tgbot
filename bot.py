@@ -31,7 +31,7 @@ async def get_cloud_ai_response(prompt: str) -> str:
                 "Content-Type": "application/json"
             }
             payload = {
-                "model": openrouter_model,
+                "model": {openrouter_model},
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0.7,
                 "max_tokens": 500
