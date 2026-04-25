@@ -6,8 +6,6 @@ from aiogram.filters.command import Command
 from aiogram.client.session.aiohttp import AiohttpSession
 import os
 
-web.run_app(app, host='0.0.0.0', port=8000)
-
 # Импортируем ключи из .env
 telegram_token = os.getenv("TELEGRAM_TOKEN")
 openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
